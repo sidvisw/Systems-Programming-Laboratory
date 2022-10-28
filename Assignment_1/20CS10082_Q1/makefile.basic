@@ -1,0 +1,32 @@
+SHELL = /bin/sh
+CC = gcc
+CFLAGS = -Wall -fPIC
+LIBNAME = libmy_library.so
+OBJFILES = llist.o stack.o queue.o heap.o union_find.o
+
+library: $(OBJFILES)
+	$(CC) -shared -o $(LIBNAME) $(OBJFILES)
+
+llist.o: llist.h
+stack.o: llist.h stack.h
+queue.o: llist.h queue.h
+heap.o: heap.h
+union_find.o: union_find.h
+
+LIBDIR = /usr/local/lib
+INCLUDEDIR = /usr/include
+INCLUDESUBDIR = $(INCLUDEDIR)/lib
+
+install: library
+	cp $(LIBNAME) $(LIBDIR)
+	-mkdir $(INCLUDESUBDIR)
+	cp llist.h stack.h queue.h heap.h union_find.h $(INCLUDESUBDIR)
+	cp my_library.h $(INCLUDEDIR)
+
+RM = rm -f
+
+clean:
+	-$(RM) $(OBJFILES)
+
+distclean:
+	-$(RM) $(OBJFILES) $(LIBNAME)
